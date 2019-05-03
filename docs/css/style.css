@@ -788,7 +788,6 @@ body {
 	animation-delay: 4s;
 }
 
-
 @-webkit-keyframes wave {
 	0% {
 		-webkit-transform: translateY(0);
