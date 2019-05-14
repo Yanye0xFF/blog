@@ -1,0 +1,73 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<META NAME="Template" CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080" BACKGROUND="Image176.gif">
+
+<FONT SIZE=6><P ALIGN="CENTER">Programming with</P>
+</FONT><P ALIGN="CENTER"><IMG SRC="hplogo.gif" WIDTH=337 HEIGHT=89></P>
+<P ALIGN="CENTER">&nbsp;</P><DIR>
+<DIR>
+
+<B><FONT SIZE=5><P ALIGN="CENTER">Introduction</P>
+<P ALIGN="CENTER">&nbsp;</P>
+</B></FONT><FONT SIZE=4><P>Before going any further, you should understand the architecture of HP's modern calculators. HP's previous graphical calculators used a custom processor known as a 'Saturn'.  Many, many years of calculator code was developed for this chip. Unfortunately the Saturn was a <U>very</U> slow CPU. Since the Saturn only ran at 4MHz the programmer sometimes had to resort to assembly language for speed. </P>
+<P>&nbsp;</P>
+<P>Then NEC (who manufactured the Saturn for HP) discontinued the chip. When HP wanted to make a new series of calculators, they decided to use a new, industry standard CPU. The processor they choose is an ARM variant; specifically the S3C2410X from Samsung. This is an ARM9 rated at 203MHz. HP clocks it at 75MHz to give longer battery life. </P>
+<P>&nbsp;</P>
+<P>The existing calculator code was written for the Saturn processor. Rewriting it for ARM was prohibitively expensive. So HP wrote a program that made the ARM pretend to be a Saturn. This process is known as emulation, and unfortunately creates a big speed penalty. The net result is the 49g+ runs 2-5 times faster then the 49g.</P>
+<P>&nbsp;</P>
+<P>Think about this for a little while. The 49g+, running at 75MHz on a modern 32 bit processor, only runs a few times faster then a 49g with a 4MHz antiquated processor. Even if you are not very interested in fast programs, consider how much battery power is being wasted running at such high speeds. You don't need 75MHz to add one plus one.</P>
+<P>&nbsp;</P>
+<P>This is where HP-GCC comes in. It lets you write programs that run directly on the ARM chip. </P>
+<P>&nbsp;</P>
+</FONT><B><FONT SIZE=5><P ALIGN="CENTER">Programming</P>
+</B></FONT><FONT SIZE=4><P>&nbsp;</P>
+<P>Traditionally in the HP world, larger programs are programmed in either System RPL or Saturn assembly language. I won't go into assembly language, as no one should have to program it today (unless they want to of course!). </P>
+<P>SysRPL is a stack-based language . "Hello World" in SysRPL might look like</P>
+<P>&nbsp;</FONT><I>:: DOCLLCD </I>Clears the LCD</P>
+<I><P>"hello world" </I>Puts the string "Hello world" on the stack</P>
+<I><P>DISPROW1 </I>Display it on row 1 of the screen</P>
+<I><P>WaitForKey</P>
+<P>2DROP ; </I>Pop off the key information returned by WaitForKey</P>
+<I><P>@ </I>end of program terminator</P>
+<FONT SIZE=4><P>&nbsp;</P>
+<P>"Hello World" using HPGCC is</P>
+<P>&nbsp;</P>
+</FONT><I><P>#include &lt;hpgcc49.h&gt; //the standard HP lib</P>
+<P>int main(void){</P><DIR>
+<DIR>
+
+<P>clear_screen(); //clear the screen</P>
+<P>printf("Hello, World!!"); //prints "hello world", starting from position 0,0</P>
+<P>while(!keyb_isON()); //loop until ON pressed</P></DIR>
+</DIR>
+
+<P>}</P>
+</I><FONT SIZE=4><P>&nbsp;</P>
+<P>SysRPL programs have several advantages. They can be tiny (as the code for say DISPROW1 is stored in ROM). The can also be written and compiled on the calculator itself. Also there is a good chance there is a command that will do exactly what you want.</P>
+<P>They also have disadvantages. Some people find complicated Stack-Based programs hard to follow. Generally there is no type checking at either compile or run time. Also SysRPL is only found on HP calculators. There's a good chance you will never meet a person in real life who can program it. It also cannot control the ARM hardware directly. Forget writing a program that can use hardware greyscale in pure SysRPL. Finally, it is slow as most SysRPL commands are still emulated. </P>
+<P>&nbsp;</P>
+<P>The HP-GCC project aims to offer a more convenient alternative. HP-GCC is:</P>
+<P>&nbsp;</P></DIR>
+</DIR>
+
+
+<UL>
+
+<UL>
+<LI>A C compiler. C is widely used in industry - For instance, the Linux Kernel is largely written in C. As such there is a huge variety of resources on the web. </LI>
+<LI>Compiled to ARM assembly. HPGCC code is not emulated so it runs <U>extremely</U> quickly. Initial estimates put it to be up to a hundred times the speed of SysRPL. The programmer can both conserve battery life and still get a huge speed boost by lowering the CPU speed. </LI>
+<LI>Powerful. You can very easily access low level hardware resources, such as the greyscale controller, timers, etc. Library functions are provided for manipulating these things.</LI></UL>
+</UL>
+
+<P>&nbsp;</P><DIR>
+<DIR>
+
+<P>For details, read on...</P></DIR>
+</DIR>
+
+<P>&nbsp;</P></FONT></BODY>
+</HTML>

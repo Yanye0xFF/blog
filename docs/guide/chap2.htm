@@ -1,0 +1,100 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>chap2</TITLE>
+<META NAME="Template" CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080" BACKGROUND="Image176.gif">
+<DIR>
+<DIR>
+
+<FONT SIZE=6><P ALIGN="CENTER">Programming with</P>
+</FONT><P ALIGN="CENTER"><IMG SRC="hplogo.gif" WIDTH=337 HEIGHT=89></P></DIR>
+</DIR>
+
+<P ALIGN="CENTER">&nbsp;</P><DIR>
+<DIR>
+
+<FONT SIZE=4><P>&nbsp;</P>
+</FONT><B><FONT SIZE=5><P ALIGN="CENTER">Hello, World!</P>
+<P ALIGN="CENTER">&nbsp;</P>
+</B></FONT><FONT SIZE=4><P>&nbsp;</P>
+<P>By now, you know how to compile and run 'hiworld.c'. What makes this file tick?</P>
+<P>&nbsp;</P>
+<P>This file contains the following code:</P>
+<P>&nbsp;</P>
+</FONT><FONT SIZE=2><P>#include &lt;hpgcc49.h&gt; //the standard HP lib</P>
+<P>int main(void){</P><DIR>
+<DIR>
+
+<P>// code begins execution from here</P>
+<P>clear_screen(); //clear the screen</P>
+<P>printf("Hello, World!!"); //prints "hello world", starting from position 0,0</P>
+<P>while(!keyb_isON()); //loop until ON pressed</P></DIR>
+</DIR>
+
+<P>}</FONT><FONT SIZE=4>  </P>
+<P>&nbsp;</P>
+<P>The first line, #include &lt;hpgcc49.h&gt;, included the needed header files. It should almost always be there.</P>
+<P>&nbsp;</P>
+<P>Clear_screen() obviously clears the calculators screen. </P>
+<P>Now there is code to loop until the ON key is pressed. Without it, the program would quit so quickly you couldn't see the text. As you might guess <I>keyb_isON()</I> returns TRUE if the ON key is being held down.</P>
+<P>Other useful keyboard related functions are <I>keyb_isRS(), keyb_isLS()</I> and <I>keyb_isAlpha().</I> These return the state of the Right Shift, Left Shift and Alpha keys respectively. ON, Alpha and the Shift keys are all connected directly to the CPU.</P>
+<P>The remaining keys are connected in a matrix fashion. To test for a key use <I>keyb_isKeyPressed(unsigned char col, unsigned char row)</I>. This returns TRUE if the key at (col,row) is pressed. Unfortunately the row and column numbers don't match the physical position of the keys. Use the following table to determine the coordinates for any key.</P>
+<P>&nbsp;</P>
+</FONT><P ALIGN="CENTER"><IMG SRC="keys.gif" WIDTH=276 HEIGHT=481></P>
+<FONT SIZE=4><P>&nbsp;</P>
+<P>&nbsp;There is also keyb_isAnyKeyPressed(). It returns TRUE if any key is being held down.</P>
+<P>&nbsp;</P>
+<B><P ALIGN="CENTER">Optimising for Size: The many faces of Hello World</P>
+</B><P>&nbsp;</P>
+<P>There is a minor issue with this program: It's over 10kb! Thats huge for such a simple program. &nbsp;</P>
+<P>The main reason is that printf is a very general-purpose function. By default, using printf has to include support for handling many different data types. After all, printf must be able to print integers, strings, and floating point numbers (floats and doubles).</P>
+<P>One simple optimisation is to leave out floating point support. If you know that you won't need to print floats or doubles, add <I>#define TINY_PRINTF</I> to the top of your file.</P>
+</FONT><FONT SIZE=2><P>&nbsp;</P>
+<P>#define TINY_PRINTF</P>
+<P>#include &lt;hpgcc49.h&gt; //the standard HP lib</P>
+<P>int main(void){</P><DIR>
+<DIR>
+
+<P>// code begins execution from here</P>
+<P>clear_screen(); //clear the screen</P>
+<P>printf("Hello, World!!"); //prints "hello world", starting from position 0,0</P>
+<P>while(!keyb_isON()); //loop until ON pressed</P></DIR>
+</DIR>
+
+<P>}</P>
+</FONT><FONT SIZE=4><P>&nbsp;</P>
+<P>This version works exactly the same as the last, but now its only 6.5kb. We can still do better.</P>
+<P>Printf() has to handle printing the values of different data types, but we only want to print a string. The Puts() function is intended to print only strings to the standard console. Replacing printf() with puts() gives a 4.5kb file.</P>
+<P>If size is really an issue, we can bypass the standard output functions and write directly to the screen. The following program is about 3.5kb</P>
+<P>&nbsp;</P>
+</FONT><FONT SIZE=2><P>#include &lt;hpgcc49.h&gt;</P>
+<P>int main(){</P><DIR>
+<DIR>
+
+<P>clearScreen(); //clear the screen</P>
+<P>print("Hello, World!!",0,0); //prints "hello world", starting from position 0,0</P>
+<P>while(!keyb_isON()){ //loop until ON pressed</P></DIR>
+</DIR>
+
+<P>}</P>
+</FONT><FONT SIZE=4><P>&nbsp;</P>
+<P>The first difference is the use of the clearScreen() function to clear the screen. </P>
+<P>In the earlier version, we were clearing the screen with clear_screen() - now we're using clearScreen(). This is a bit confusing. Why have 2 clear screen functions?</P>
+<P>Print() is a dumb function. It doesn't do any text formatting. It just dumps a string to a given position on the screen. Printf on the other hand is much more complicated. It has a cursor, which keeps track for the next position to put text.</P>
+<P>ClearScreen() actually calls a routine in ROM to erase the screen. So it is fairly tiny. Clear_screen() on the other hand clears the screen and also resets the cursor to the upper-left of the screen. It is a little bit bigger. A rule of thumb is if you are using standard C functions output functions, such as puts or printf, use clear_screen(). Otherwise use clearScreen(). If you don't care about size, its simpler to just always use clear_screen().</P>
+<P>&nbsp;</P>
+<P>Note that both ClearScreen() and clear_screen() only work if you are not using a graphics library.</P>
+<P>&nbsp;</P>
+<P> Next we have Print(). It takes in a string, and X and Y parameters. Note that the X and Y axis is as follows:</P>
+</FONT><P><IMG SRC="screen.gif" WIDTH=492 HEIGHT=295></P>
+<FONT SIZE=4><P>So, (0,0) is actually the upper left corner, not the lower left.</P>
+<P>&nbsp;</P>
+<P>print("Hello, World!!",0,0);</P>
+<P>&nbsp;</P>
+<P>will print the text "Hello World" in the upper left corner of the screen.</P></DIR>
+</DIR>
+</FONT></BODY>
+</HTML>

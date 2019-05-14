@@ -1,0 +1,92 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>chap3</TITLE>
+<META NAME="Template" CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080" BACKGROUND="Image176.gif">
+<DIR>
+<DIR>
+
+<FONT SIZE=6><P ALIGN="CENTER">Programming with</P>
+</FONT><P ALIGN="CENTER"><IMG SRC="hplogo.gif" WIDTH=337 HEIGHT=89></P></DIR>
+</DIR>
+
+<P ALIGN="CENTER">&nbsp;</P><DIR>
+<DIR>
+
+<FONT SIZE=4><P>&nbsp;</P>
+</FONT><B><FONT SIZE=5><P ALIGN="CENTER">Some High Level Examples</P>
+<P ALIGN="CENTER">&nbsp;</P>
+</B></FONT><FONT SIZE=4><P>&nbsp;</P>
+<P>Now, lets look at an example that uses higher level I/O. Compile and run 'input.c' in the c:\arm-hp\examples\simple\ directory. The source code is:</P>
+</FONT><FONT SIZE=2><P>#define TINY_PRINTF</P>
+<P>#include &lt;hpgcc49.h&gt; //the standard HP lib</P>
+<P>int main(void)</P>
+<P>{</P>
+<P>// code begins execution from here</P><DIR>
+<DIR>
+
+<P>char name[50]; //reserve 50 bytes for the users name</P>
+<P>clear_screen(); //clear the screen</P>
+<P>printf("Please enter your name\n");</P>
+<P>gets(name);//read a string into 'name'</P>
+<P>printf("\n\nHello, %s",name); //print "Hello, &lt;name&gt;" a few lines down</P>
+<P>printf("\n\nPlease enter a whole number\n");</P>
+<P>int number1 = readint(); //read an Int from the keyboard</P>
+<P>printf("\n\nPlease enter another whole number\n");</P>
+<P>int number2 = readint(); //read an Integer from the keyboard</P>
+<P>printf("\n\n%d + %d = %d\n\n",number1,number2,number1+number2);</P>
+<P>printf("\nPress ON to quit");</P>
+<P>while(!keyb_isON()); //loop until ON pressed</P></DIR>
+</DIR>
+
+<P>}</P>
+</FONT><FONT SIZE=4><P>&nbsp;</P>
+<P>This file demonstrates using functions to read in integers and strings from the keyboard, and using printf to display them. <I>Gets()</I> reads a string from the keyboard into memory. <I>Readint()</I>, reads a signed integer. </P>
+<P>Some other keyboard routines are readuint (unsigned integer), readdouble, readlonglong, and readulonglong (unsigned long long). Some output routines are</P>
+<P>&nbsp;</P>
+<P>puts(char * string) - Print a string on the screen. This is a standard C function, like print(), but you cannot directly specify where to write the string.&nbsp;</P>
+<P>home() - Return cursor to the top left corner</P>
+<P>gotoxy(int x, int y) - Move cursor to position X, Y.</P>
+<P>&nbsp;</P>
+<P>As another example, here is a simple guessing game. The program picks a number between zero and one hundred, and you have to guess it. The program will tell you if your guess is too high, or too low</P>
+</FONT><FONT SIZE=2><P>&nbsp;</P>
+<P>#define TINY_PRINTF</P>
+<P>#include &lt;hpgcc49.h&gt;</P>
+<P>int main(){</P>
+<P>&#9;int guessesLeft = 10; //initial number of guesses</P>
+<P>&#9;int guess;</P>
+<P>&#9;srand(sys_getPWMCounter0()); //seed the random number generator</P>
+<P>&#9;int number = rand()%100; //pick a number at random between 0-100</P>
+<P>&#9;clear_screen(); //clear the screen</P>
+<P>&#9;printf("Guessing Game\n\nguess a number between 1 and 100\n\n");</P>
+<P>&#9;while(1){ //loop</P>
+<P>&#9;&#9;printf("\n\nYou have %d guesses left:\n\n",guessesLeft); </P>
+<P>&#9;&#9;guess=readint(); //read an integer from the keyboard</P>
+<P>&#9;&#9;if(guess&lt;number){</P>
+<P>&#9;&#9;&#9;printf("\n\nToo low! Try Again");</P>
+<P>&#9;&#9;}</P>
+<P>&#9;&#9;if(guess&gt;number){</P>
+<P>&#9;&#9;&#9;printf("\n\nToo high! Try Again");</P>
+<P>&#9;&#9;}</P>
+<P>&#9;&#9;if(guess==number){</P>
+<P>&#9;&#9;&#9;printf("\n\nGood Guess! You Win!");</P>
+<P>&#9;&#9;&#9;break; //quit the loop</P>
+<P>&#9;&#9;}</P>
+<P>&#9;</P>
+<P>&#9;&#9;guessesLeft--; //decrease the number of guesses left</P>
+<P>&#9;&#9;if (guessesLeft==0){ //check if no guesses left</P>
+<P>&#9;&#9;&#9;printf("\n\nSorry, you Lose!"); //none left</P>
+<P>&#9;&#9;&#9;break; //quit the loop</P>
+<P>&#9;&#9;}&#9;</P>
+<P>&#9;}</P>
+<P>&#9;printf("\n\n\nPress ON to Quit...");</P>
+<P>&#9;while(!keyb_isON()); //wait until ON is pressed</P>
+<P>}</P>
+</FONT><FONT SIZE=4><P>The only new functionality here is the use of the random number generator. Srand() is used to setup the random number generator. It should be given a number that is different each time the program is run. This is done by feeding it the current value of a timer. After that, rand() will give a random number.</P>
+<P>&nbsp;</P></DIR>
+</DIR>
+</FONT></BODY>
+</HTML>

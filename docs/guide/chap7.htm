@@ -1,0 +1,88 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>chap7</TITLE>
+<META NAME="Template" CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080" BACKGROUND="Image176.gif">
+<DIR>
+<DIR>
+
+<FONT SIZE=6><P ALIGN="CENTER">Programming with</P>
+</FONT><P ALIGN="CENTER"><IMG SRC="hplogo.gif" WIDTH=337 HEIGHT=89></P></DIR>
+</DIR>
+
+<P ALIGN="CENTER">&nbsp;</P><DIR>
+<DIR>
+
+<B><FONT SIZE=5><P ALIGN="CENTER">The HPG Graphics Library</P>
+<P ALIGN="CENTER">&nbsp;</P>
+</B></FONT><FONT SIZE=4><P>Numerous libraries are included with HP-GCC. HPG is a general-purpose Greyscale Graphics API. It includes many examples and documentation elsewhere so this will just be a brief tour.</P>
+<P>The most versatile mode of HPG is double buffered, 16-shade greyscale. This gives 16 shades of grey with minimal flicker/tearing. Lets begin with a program that displays text in various shades of grey.</P>
+<P>&nbsp;</P>
+</FONT><FONT SIZE=2><P>#include &lt;hpgcc49.h&gt;</P>
+<P>//add this line to include HPG functions</P>
+<P>#include &lt;hpgraphics.h&gt;</P>
+<P>int main(void)</P>
+<P>{</P><DIR>
+<DIR>
+
+<P>hpg_set_mode_gray16(1); //enter 16 colour, double buffered mode</P>
+<P>hpg_clear(); //clear the screen</P>
+<P>hpg_set_color(hpg_stdscreen, HPG_COLOR_BLACK);</P>
+<P>hpg_draw_text("Black", 0, 0);</P>
+<P>hpg_set_color(hpg_stdscreen, HPG_COLOR_GRAY_12);</P>
+<P>hpg_draw_text("Grey #12", 0, 10);</P>
+<P>hpg_set_color(hpg_stdscreen, HPG_COLOR_GRAY_8);</P>
+<P>hpg_draw_text("Grey #8", 0, 20);</P>
+<P>hpg_set_color(hpg_stdscreen, HPG_COLOR_GRAY_5);</P>
+<P>hpg_draw_text("Grey #5", 0, 30);</P>
+<P>hpg_set_color(hpg_stdscreen, HPG_COLOR_GRAY_3);</P>
+<P>hpg_draw_text("Grey #3", 0, 40);</P>
+<P>hpg_flip(); //write the new picture to the screen</P>
+<P>while(!keyb_isON()); //wait until ON pressed</P></DIR>
+</DIR>
+
+<P>}</P>
+</FONT><FONT SIZE=4><P>&nbsp;</P>
+<P>This is fairly simple. When using HPG you must #include &lt;hpgraphics.h&gt; . </P>
+<P>Hpg_set_mode_gray16(1) puts HPG into 16-shade, double buffered mode. 16 Shade obviously means that there are 16 shades of grey to choose from. Double buffering is a technique to reduce flicker. When in double buffered mode, any changes to the screen only take place after calling hpg_flip(). These means that your entire screen is drawn at once. Without double buffering the user may see flicker as the objects are drawn separately.</P>
+<P>Hpg_clear() is used to clear the screen whilst HPG is active. </P>
+<I><P>' hpg_set_color(hpg_stdscreen, HPG_COLOR_XXX);'</I> is used to change the current colour. Besides HPG_COLOR_BLACK, there is HPG_COLOR_GRAY_1 (very light) to GRAY_15 (very dark). </P>
+<P>&nbsp;</P>
+<P>Hpg_draw_text() functions just like print(), but it draws in the currently selected colour.</P>
+<P>&nbsp;</P>
+<P>Here's another example that draws some text and shapes on screen. Rather then repeat it here, see the HPG reference documentation for an explanation of each function.</P>
+</FONT><FONT SIZE=2><P>&nbsp;</P>
+<P>#include &lt;hpgcc49.h&gt;</P>
+<P>//add this line to include HPG functions</P>
+<P>#include &lt;hpgraphics.h&gt;</P>
+<P>int main(void)</P>
+<P>{</P>
+<P>&#9;hpg_set_mode_gray16(1); //enter 16 colour, double buffered mode</P><DIR>
+<DIR>
+
+<P>hpg_clear(); //clear the screen</P>
+<P>hpg_set_color(hpg_stdscreen, HPG_COLOR_BLACK);</P>
+<P>hpg_draw_text("minifont", 0, 0);</P>
+<P>hpg_set_font(hpg_stdscreen, hpg_get_bigfont()); //change to a big font</P>
+<P>hpg_draw_text("big font", 0, 20);</P>
+<P>hpg_set_font(hpg_stdscreen, hpg_get_minifont()); //and back to small</P>
+<P>hpg_draw_text("minifont again", 0, 35);</P>
+<P>hpg_draw_line(70,5,70,25);// draw a line</P>
+<P>hpg_draw_rect(50,60,55,70); //and a rectangle</P>
+<P>hpg_set_color(hpg_stdscreen, HPG_COLOR_GRAY_8); //grey&#9;</P>
+<P>hpg_fill_rect(50,0,60,10); //fill in a rectangle</P>
+<P>hpg_set_color(hpg_stdscreen, HPG_COLOR_GRAY_5); //lightish grey</P>
+<P>hpg_fill_circle(70,70,4); //draw a circle</P>
+<P>hpg_flip(); //apply the changes</P>
+<P>while(!keyb_isON()); //wait until ON pressed</P></DIR>
+</DIR>
+
+<P>}</P>
+</FONT><FONT SIZE=4><P>&nbsp;</P>
+<P>&nbsp;</P></DIR>
+</DIR>
+</FONT></BODY>
+</HTML>

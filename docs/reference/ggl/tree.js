@@ -1,0 +1,8 @@
+foldersTree = gFld("<b>GGL</b>", "", "")
+     insDoc(foldersTree, gLnk("GGL - Grayscale Graphics Library", "", "main.html"))
+aux1 = insFld(foldersTree, gFld("File List", "", "files.html"))
+       insDoc(aux1, gLnk("ggl.h", "", "ggl_8h.html"))
+aux1 = insFld(foldersTree, gFld("Data Structures", "", "annotated.html"))
+       insDoc(aux1, gLnk("gglsurface", "", "structgglsurface.html"))
+     insDoc(foldersTree, gLnk("Data Fields", "", "functions.html"))
+     insDoc(foldersTree, gLnk("Globals", "", "globals.html"))

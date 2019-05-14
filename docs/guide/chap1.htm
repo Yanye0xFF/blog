@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>chap1</TITLE>
+<META NAME="Template" CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080" BACKGROUND="Image176.gif">
+<DIR>
+<DIR>
+
+<FONT SIZE=6><P ALIGN="CENTER">Programming with</P>
+</FONT><P ALIGN="CENTER"><IMG SRC="hplogo.gif" WIDTH=337 HEIGHT=89></P></DIR>
+</DIR>
+
+<P ALIGN="CENTER">&nbsp;</P><DIR>
+<DIR>
+
+<FONT SIZE=4><P>&nbsp;</P>
+</FONT><B><FONT SIZE=5><P ALIGN="CENTER">Windows Installation</P>
+<P ALIGN="CENTER">&nbsp;</P>
+</B></FONT><FONT SIZE=4><P>This chapter covers installation and execution of HPGCC programs on a Windows system. It assumes you do not have Cygwin installed. </P>
+<P>First download the latest version of HPGCC for Windows from http://hpgcc.org . Next use an archive utility, like WinZip to extract the contents of the ZIP file to c:\. There should be a folder created, c:\arm-hp. </P>
+</FONT><P ALIGN="CENTER"><IMG SRC="armhp.jpg" WIDTH=550 HEIGHT=283></P>
+<FONT SIZE=4><P>Note: the following instructions assume that you are installing to c:\arm-hp\. If you are installing elsewhere, modify these instructions accordingly. </P>
+<P>Next, you must up set some environment variables to point to HPGCC.</P>
+<P>There are <U>2</U> variables to set. </P>
+<P>&nbsp;</P></DIR>
+</DIR>
+
+
+<UL>
+
+<UL>
+<LI>The PATH variable must include the HPGCC binaries folder. This is typically "c:\arm-hp\bin". </LI>
+<LI>A new variable, called HPGCC, must also point to this folder. There must not be a trailing slash.</LI></UL>
+</UL>
+<DIR>
+<DIR>
+
+<P>&nbsp;</P>
+<B><P>Windows 9x/ME:</P>
+</B><P>&nbsp;</P>
+<P>Click Start -&gt; Run -&gt; Type 'sysedit'. A window will pop up with many files. Add the following lines to the end of your 'autoexec.bat' file </P>
+<I><P>path=%path%;c:\arm-hp\bin</P>
+<P>set HPGCC=C:\arm-hp\bin</P>
+</I></FONT><P ALIGN="CENTER">&nbsp;</P>
+<FONT SIZE=4><P>Quit sysedit, and save autoexec.bat when prompted. Then reboot your machine.</P>
+<P>&nbsp;</P>
+<B><P>Windows XP/2000:</P>
+</B><P>&nbsp;</P>
+<P>1. From the desktop right click My Computer and click properties.</P>
+<P>2. In the System Properties window click on the Advanced tab.</P>
+<P>3. In the Advanced section click the Environment Variables button. </P>
+<P>4. Finally, in the Environment Variables window highlight the path variable in the Systems Variable section and click edit. To the end, add a semicolon, then c:\arm-hp\bin. </P>
+<P>&nbsp;</P>
+<P>&#9;&lt;old value&gt;;c:\arm-hp\bin</P>
+<P>If there is no "PATH" variable, you will have to make one. Make its value</P>
+<P>&#9;c:\arm-hp\bin</P>
+<P>5. You must now create a new variable, called "HPGCC", and set it to c:\arm-hp\bin. Save and reboot your PC.</P>
+<P>&nbsp;</P>
+<B><P>Testing the Installation</P>
+</B><P>&nbsp;</P>
+<P>Next you should run some tests to make sure HPGCC is properly installed. Open up a MS-DOS prompt (Start-&gt;Run-&gt; type 'Command'). Next type 'hpgcc'. With luck, you should see something like</P>
+</FONT><P ALIGN="CENTER"><IMG SRC="cmd1.jpg" WIDTH=553 HEIGHT=284></P>
+<FONT SIZE=4><P>Now try testing the GCC compiler, and the ELF2HP tool. Type 'arm-elf-gcc', then type 'elf2hp'. See if you get the following</P>
+<P>&nbsp;</P>
+</FONT><P ALIGN="CENTER"><IMG SRC="cmd2.jpg" WIDTH=552 HEIGHT=385></P>
+<FONT SIZE=4><P ALIGN="CENTER">&nbsp;</P>
+<P>Finally, try to compile some of the examples. One of the included examples is a simple "hello world" file, called hiworld.c. </P>
+<P>&nbsp;</P>
+<P>Change directories into 'c:\arm-hp\examples\simple\', and try to compile 'hiworld.c'.</P>
+<P>This file contains the following code:</P>
+<P>&nbsp;</P>
+</FONT><FONT SIZE=2><P>#include &lt;hpgcc49.h&gt; //the standard HP lib</P>
+<P>int main(void){</P><DIR>
+<DIR>
+
+<P>// code begins execution from here</P>
+<P>clear_screen(); //clear the screen</P>
+<P>printf("Hello, World!!"); //prints "hello world", starting from position 0,0</P>
+<P>while(!keyb_isON()); //loop until ON pressed</P></DIR>
+</DIR>
+
+<P>}</FONT><FONT SIZE=4> </P>
+<P>&nbsp;</P>
+<P>Type "cd c:\arm-hp\examples\hiworld", then "hpgcc hiworld".</P>
+<P>&nbsp;</P>
+</FONT><P><IMG SRC="cmd3.jpg" WIDTH=546 HEIGHT=234></P>
+<FONT SIZE=4><P>&nbsp;</P>
+<P>With luck a new file, 'hiworld.hp' should be in your c:\arm-hp\examples\hiworld directory. It is a standard HP string. You can send it directly to your calculator with the HP connectivity kit.</P>
+<P>&nbsp;</P>
+<B><P>Running a HPGCC Program</P>
+</B><P>&nbsp;</P>
+<P>In your C:\arm-hp\ARMToolBox directory, there is a file, Lib275.lib. This is the "ARM Toolbox" and it is an essential library for HPGCC development. Send this file to your calculator. Then on the calculator use the filer to move it to Port 2. If needed, see </FONT><A HREF="http://alpage.ath.cx/hptute/memory.htm">Here</A><FONT SIZE=4> for a quick tutorial on libraries and the connectivity kit. Then do a warm-start.</P>
+<P>Finally, put the string 'hiworld' on the Stack (I am assuming you are using RPN mode). You must use the 'PrRUN' command to run it. Press Red-shift 2, select 'ARM ToolBox', then PrRUN. The text "Hello World" should appear. Press ON to exit.</P>
+<P>&nbsp;</P>
+<P>If you followed all these steps successfully, then congratulations! You have compiled your first HPGCC program.</P>
+<P>&nbsp;</P>
+<P>&nbsp;<B>Troubleshooting</P>
+<P>&nbsp;</P>
+</B><P>What should you do if something went wrong? </P>
+<P>More than likely, the environment variables were not set correctly.</P>
+<P>First, open up a DOS prompt. Type 'elf2hp' and press enter. If you get a <I>bad command or file name</I> or '<I>elf2hp' is not recognized as an internal or external command, operable program or batch file</I> message then the PATH has not been set up correctly. Make sure that it includes the HPGCC binaries folder, eg c:\arm-hp\bin.</P>
+<P>If you see </P>
+<I><P>Error, not enough arguments were given. Need 2 filenames.</P>
+<P>Try elf2hp -h.</I>&nbsp;</P>
+<P>Then the system can find the HPGCC executables. The PATH must be correct. Try compiling a demo program such as 'hiworld.c'. </P>
+<P>&nbsp;</P>
+<P>If you get many compiler errors, followed by </P>
+<I><P>cannot open linker script file \..\lib\mmuld.script: No such file or directory</P>
+</I><P>then the HPGCC variable is not set correctly. It must also point to the HPGCC binaries directory, and it must not have a trailing slash. C:\arm-hp\bin is acceptable, c:\arm-hp\bin\ is not.</P>
+<P>&nbsp;</P>
+<P>If you are still having problems then please let us know! See http://hpgcc.org for contact details.</P>
+</FONT><P>&nbsp;</P></DIR>
+</DIR>
+</BODY>
+</HTML>

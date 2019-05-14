@@ -1,0 +1,110 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>chap4</TITLE>
+<META NAME="Template" CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080" BACKGROUND="Image176.gif">
+<DIR>
+<DIR>
+
+<FONT SIZE=6><P ALIGN="CENTER">Programming with</P>
+</FONT><P ALIGN="CENTER"><IMG SRC="hplogo.gif" WIDTH=337 HEIGHT=89></P></DIR>
+</DIR>
+
+<P ALIGN="CENTER">&nbsp;</P><DIR>
+<DIR>
+
+<B><FONT SIZE=5><P ALIGN="CENTER">Timers, Sound and Simple Graphics</P>
+</B></FONT><FONT SIZE=4><P>&nbsp;</P>
+<P>For games, timing is essential. There are several resources for dealing with timers.</P>
+<P>&nbsp;</P>
+<B><P>The Real Time Clock</P>
+</B><P>&nbsp;</P>
+<P>The best resource for low speed timing and delays is the Real Time Clock (or RTC). The RTC is generally used to store the current time. You can retrieve the current time by using sys_RTC_seconds() - This returns sec+60*min+3600*hour.</P>
+<P>The RTC also provides a programmable 'Tick' output. The Tick rate is independent of the main CPU speed.</P>
+<P>sys_isRTCTick() is used to read the Tick output. It returns 1 if an RTC Tick has occurred since the last time it was called. By default (in ROM 1.23), the Tick rate is 8 Hertz. The Tick rate can be programmed by using</P>
+<P>unsigned char sys_setRTCTickPeriod(unsigned char n)</P>
+<P>This function takes in a number, n. This function sets the RTC tick period to (n+1)/128 seconds. N _must_ be between 1 and 127. This function returns the old value of n. It is highly recommended that if you use this function, you restore the Tick Period to the old rate at the end of your function.</P>
+<P>Next, there is </P>
+<P>void sys_waitRTCTicks(int count)</P>
+<P>This function simply waits for 'count' ticks to elapse. At the default rate of 8Hz, sys_waitRTCTick(8) will wait for about 1 second. Increasing the RTC Tick rate improves the accuracy of the delay. </P>
+<P>The Real Time Clock only provides an output between 1Hz and 128Hz. For faster timing you must use a dedicated hardware timer.</P>
+<B><P>Hardware Timers</P>
+</B><I><P>Note: Hardware Timer support is currently experimental, and not very accurate. Expect this documentation to be revised.</P>
+</I><P>&nbsp;</P>
+<P>The hardware timers offer much faster timing. Unfortunately they vary with CPU speed. </P>
+<P>Before using a hardware timer, you must call</P>
+<P>Void sys_setupTimers() </P>
+<P>This sets the timers to a known state - updating at 750kHz by default. If you use this function, you should <B>always</B> call void sys_restoreTimers() at the end of your program. This restores the timers to system defaults. If you change the CPU speed (if you don't know if you are, you're not changing it) the timers will be incorrect.</P>
+<P>&nbsp;</P>
+<P>To use the Timer, call </P>
+<P>Void sys_waitTicks (unsigned int time)</P>
+<P>This delays for 'time' ticks. In slow mode, the ticks should occur every 750kHz. Hence </P>
+<P>sys_waitTicks (750000) should delay for about a second.</P>
+<P>&nbsp;</P>
+<B><P>Sound</P>
+</B><P>&nbsp;</P>
+<P>The internal buzzer is fairly easy to manipulate. It is connected to a general purpose I/O pin, pin B2. Toggling the state of this pin will make noises.</P>
+<P>void sys_playTone(unsigned int tone, unsigned int duration)</P>
+<P>is provided to make simple tones. This function relies on the Hardware timers, with sys_setupTimers() called to use it.</P>
+<P>Basically, 'tone' is a frequency in Hertz and 'duration' is a time in hundredths of seconds. A 'fudge factor' has been applied to correct for the inaccuracy of the timing system. The result is not super-accurate, but good enough for sound effects.</P>
+<P>&nbsp;</P>
+<B><P>Simple Graphics Routines </P>
+<P>&nbsp;</P>
+</B><P>There are currently 2 Greyscale Graphics Libraries included with HPGCC - HPG and GGL. These are powerful libraries intended for games and more complicated applications. This particular page concerns the primitive monochrome routines included in HPLib.</P>
+<P>These routines are intended for very simple graphical applications. They are not double buffered and operate on the default screen area. Do not try and mix them with another Graphics library. In addition, they are not clipped - attempting to draw an object outside of the screen may cause memory corruption.</P>
+<P>&nbsp;</P>
+<P>Void clearScreen();</P>
+<P>This clears the screen.</P>
+<P>&nbsp;</P>
+<P>void invertScreen();</P>
+<P>A very simple screen function - it inverts the colours of the LCD (eg black becomes white, and white becomes black). This will only be reversed by a power cycle - calling invertScreen() again will not return the screen to normal. This is a handy debugging aid.</P>
+<P>&nbsp;</P>
+<P>void LCDSynch();</P>
+<P>This routine waits, and only returns when the LCD has just finished redrawing the screen. It is useful for preventing tearing when manipulating the screen directly. Not useful for simple programs, only games or animations</P>
+<P>&nbsp;</P>
+<P>void drawBlockOR (unsigned char* sprite, int length, int x, int y);</P>
+<P>void drawBlockXOR (unsigned char* sprite, int length, int x, int y);</P>
+<P>These are used for drawing a byte-wide, variable length graphic to the screen. They really differ only when drawing over an existing object. OR makes pixel's black, XOR inverts them. Sprite contains the data to draw, length is how many bytes make up that sprite, and X/Y is the top-left position to draw from.</P>
+<P>&nbsp;</P>
+<P>void fillTiles(unsigned char* sprite, int length, int x,int y, int right, int down);</P>
+<P>fillTiles is used for filling an area with the same sprite, tiled over and over again. Usage is the same as for drawBlockxx, but with 'right' tiles to the right and 'down' tiles downward of the starting position</P>
+<P>&nbsp;</P>
+<P>Here's a simple example. It draws a block on the screen that you can move with the arrow keys. Press ON to quit.</P>
+<P>&nbsp;</P>
+</FONT><FONT SIZE=2><P>#include &lt;hpgcc49.h&gt;</P>
+<P>int main(void){</P>
+<P>     char b[] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff}; //a sprite to draw, in this case a solid block. Change this data to get different shapes.</P>
+<P>     int y = 50;</P>
+<P>     int x = 40; // initial position of sprite</P>
+<P>     clearScreen(); //clear the screen initially.</P>
+<P>     drawBlockOR(b,8,x,y); //and draw the block</P>
+<P>      while (!keyb_isON()){ // bail out if ON pressed</P><DIR>
+<DIR>
+
+<P>if (keyb_isUp() &amp;&amp; y&gt;0) y--; //adjust block position depending on keys.          </P>
+<P>if (keyb_isDown() &amp;&amp; y&lt;72) y++;</P>
+<P>if (keyb_isLeft() &amp;&amp; x&gt;0) x--;</P>
+<P>if (keyb_isRight() &amp;&amp; x&lt;123) x++;</P>
+<P>if(keyb_isAnyKeyPressed()){ //redraw the screen if any key pressed</P><DIR>
+<DIR>
+
+<P>sys_LCDSynch(); //wait for LCD Refresh</P>
+<P>clearScreen();</P>
+<P>drawBlockOR(b,8,x,y); //and draw the block on top of it.</P>
+<P>sys_waitRTCTicks(1);  //wait 1/8th of a sec (default setting, no need to alter it)</P></DIR>
+</DIR>
+</DIR>
+</DIR>
+
+<P>              }</P>
+<P>      }</P>
+<P>}&nbsp;</P>
+</FONT><FONT SIZE=4><P>&nbsp;</P>
+<P>By default, it draws a solid block. By altering the values of b[], you can change the appearance of the sprite.</P>
+<P>&nbsp;</P></DIR>
+</DIR>
+</FONT></BODY>
+</HTML>

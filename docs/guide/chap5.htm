@@ -1,0 +1,71 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>chap5</TITLE>
+<META NAME="Template" CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080" BACKGROUND="Image176.gif">
+<DIR>
+<DIR>
+
+<FONT SIZE=6><P ALIGN="CENTER">Programming with</P>
+</FONT><P ALIGN="CENTER"><IMG SRC="hplogo.gif" WIDTH=337 HEIGHT=89></P></DIR>
+</DIR>
+
+<P ALIGN="CENTER">&nbsp;</P><DIR>
+<DIR>
+
+<B><FONT SIZE=5><P ALIGN="CENTER">The SD Card</P>
+</B></FONT><FONT SIZE=4><P>&nbsp;</P>
+<P>This section only applies to the HP49g+. Do not try using these functions on a 48gii or 39g+. </P>
+<P>&nbsp;</P>
+<P>HPGCC provides an interface to the SD card. The following functions are provided</P>
+<P>&nbsp;</P>
+<P>Fopen(),fclose(),fread(),fwrite(),fputc(),fputs(),fgetc(),fgets(), fdelete()</P>
+<P>&nbsp;</P>
+<P>These functions are very similar to the standard ones. The following example will create a file "testme.txt" on the root directory of the SD card. It will then write "Testing 1,2,3" to it.</P>
+</FONT><I><P>#define TINY_PRINTF&nbsp;</P>
+<P>#include &lt;hpgcc49.h&gt;</P>
+<P>int main() {</P><DIR>
+<DIR>
+
+<P>FILE *file; /* declare a FILE pointer */</P>
+<P>sys_intOff();</P>
+<P>clear_screen();</P>
+<P>file = fopen("testme.txt", "w"); </P>
+<P>/* create a text file for writing */</P>
+<P>if(file==NULL) {</P><DIR>
+<DIR>
+
+<P>printf("Error: can't create file.\n");</P>
+<P>while(!keyb_isON());</P>
+<P>sys_intOn();</P>
+<P>return 1;</P></DIR>
+</DIR>
+
+<P>}</P>
+<P>else {</P><DIR>
+<DIR>
+
+<P>printf("File created. Now closing it...\n");</P>
+<P>fputs("TESTING 1,2,3", file);</P>
+<P>fclose(file);</P>
+<P>while(!keyb_isON());</P>
+<P>sys_intOn();</P>
+<P>return 0;</P></DIR>
+</DIR>
+
+<P>}</P></DIR>
+</DIR>
+
+<P>}</P>
+</I><FONT SIZE=4><P>&nbsp;</P>
+<P>Files may be opened in Read ('r'), Write ('w') or Append('a) modes. Subfolders are handled with a '/' character. EG, to open file 'bob' in folder 'joe', open "joe/bob". To create a new folder, try running fopen on the folder name. </P>
+</FONT><I><P>fopen("new/", "w");</P>
+</I><FONT SIZE=4><P>should create a new folder, called new.</P>
+<P>&nbsp;</P>
+<P>At present very little is known about SD card functionality. This is handled by HP's OS and we have almost no documentation on it.</P></DIR>
+</DIR>
+</FONT></BODY>
+</HTML>

@@ -1,0 +1,150 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>chap6</TITLE>
+<META NAME="Template" CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080" BACKGROUND="Image176.gif">
+<DIR>
+<DIR>
+
+<FONT SIZE=6><P ALIGN="CENTER">Programming with</P>
+</FONT><P ALIGN="CENTER"><IMG SRC="hplogo.gif" WIDTH=337 HEIGHT=89></P></DIR>
+</DIR>
+
+<P ALIGN="CENTER">&nbsp;</P><DIR>
+<DIR>
+
+<B><FONT SIZE=5><P ALIGN="CENTER">RPL Stack Support</P>
+<P ALIGN="CENTER">&nbsp;</P>
+</B></FONT><FONT SIZE=4><P>&nbsp;The 'Saturn' module incldued with HP-GCC handles the RPL stack. It lets you push and pop various kinds of objects, and do basic stack manipulation. </P>
+<P>The first thing to know is that there is a matched pair of functions that MUST be used before accessing the stack. Before doing any stack operations, you must call sat_stack_init(). Save the value it returns, and then pass that value to sat_stack_exit at the end of your program. You <U>must not forget this</U>, these functions are needed to prevent possible memory loss / crashes.</P>
+<P>Another thing to know is that if you are going to push large objects to the stack you need to set up your HP-GCC program to reserve more space for those objects. </P>
+<P>By default, 10kb is reserved for pushing objects onto the stack. You may wish to edit hpgcc.bat to increase this number. Change the line</P>
+<I><P>set hpgcc_rplstacksize=10000</P>
+<P>&nbsp;</I>to a higher number to reserve more memory if needed. As long as there is sufficient memory you are guaranteed to be able to push five objects on the stack. You may edit hpgcc.bat to increase this limit, at the expense of greater memory usage. &nbsp;</P>
+<P>&nbsp;</P>
+<P>As a really simple example, consider a program that pushes the string "Hello, world!" to the stack</P><DIR>
+<DIR>
+
+</FONT><I><P>#include &lt;hpgcc49.h&gt; </P>
+<P>int main()</P>
+<P>{</P>
+<P>&#9;// Initialize RPL stack</P>
+<P>&#9;unsigned rpl_stack_bias = sat_stack_init();</P>
+<P>&#9;sat_stack_push_string("Hello, World!");</P>
+<P>&#9;sat_stack_exit(rpl_stack_bias); //close it</P>
+<P>&#9;return 0;</P>
+<P>}</P>
+</I><FONT SIZE=4><P>&nbsp;</P></DIR>
+</DIR>
+
+<P>You can see the mandatory usage of sat_stack_init and sat_stack_exit. In addition, the function sat_stack_push_string() will push a string onto the RPL stack. </P>
+<P>&nbsp;</P>
+<P>Here's another example. This one pops an exact integer (known as a ZINT in HP terms) off the stack, doubles it, and pushes the result as a ZINT.</P><DIR>
+<DIR>
+
+</FONT><I><P>#include &lt;hpgcc49.h&gt; </P>
+<P>int main()</P>
+<P>{</P>
+<P>&#9;// Initialize RPL stack</P>
+<P>&#9;unsigned rpl_stack_bias = sat_stack_init();</P>
+<P>&#9;sat_push_zint_llong(sat_pop_zint_llong()*2);</P>
+<P>&#9;sat_stack_exit(rpl_stack_bias); //close it</P>
+<P>&#9;return 0;</P>
+<P>}</P>
+</I><FONT SIZE=4><P>&nbsp;</P></DIR>
+</DIR>
+
+<P>sat_pop_zint_llong() will pop a ZINT off the top of the stack, and return the value as a LONGLONG. A LONGLONG is a signed 64 bit integer type, it can hold numbers beween +/- 1.8*10^19. Trying to pop ZINTs outside this range will give a bad result. </P>
+<P>&nbsp;</P>
+<P>Sat_push_zint_llong() accepts a LONGLONG, and pushes it to the RPL stack as a ZINT. </P>
+<P>&nbsp;</P>
+<P>Note that this program does no error checking. What happens if the user had an empty RPL stack? What of the first item on the top of the stack was a string, not a ZINT? Here is a program that demonstrates popping 2 ZINTs off the stack, adding them and pushing the result... while making sure there are in fact 2 ZINTs to pop.</P>
+</FONT><I><P>&nbsp;</P>
+<P>#include &lt;hpgcc49.h&gt; </P>
+<P>&nbsp;</P>
+<P>int main()</P>
+<P>{</P>
+<P>// Initialize stack access</P>
+<P>&#9;unsigned rpl_stack_bias = sat_stack_init();</P>
+<P>&#9;if (sat_stack_depth()&lt;2){ //check for enough items</P><DIR>
+<DIR>
+<DIR>
+<DIR>
+
+<P>sat_stack_push_string("Error: Too Few Arguments!");</P>
+<P>goto exit;</P></DIR>
+</DIR>
+
+<P>} </P></DIR>
+</DIR>
+
+<P>&#9;</P>
+<P>&#9;SAT_STACK_ELEMENT first; //examine the elements on stack</P>
+<P>&#9;SAT_STACK_ELEMENT second; //we don't pop them yet.</P>
+<P>&#9;</P>
+<P>&#9;sat_get_stack_element(1,&amp;first); //look at first element from stack</P>
+<P>&#9;sat_get_stack_element(2,&amp;second);//look at second element from stack</P>
+<P>&#9;</P>
+<P>&#9;//Now, check that both 'first' and 'second' are ZINTs</P>
+<P>&#9;//One way to do this is by checking the 'prologue'. It identifies</P>
+<P>&#9;//the type of the object. Use 'SAT_DOINT' to check for ZINTs</P>
+<P>&#9;if( (first.prologue!=SAT_DOINT)||(second.prologue!=SAT_DOINT)){</P><DIR>
+<DIR>
+<DIR>
+<DIR>
+
+<P>sat_stack_push_string("Error: Bad Argument Type!"); //bail out</P>
+<P>goto exit;&#9;</P></DIR>
+</DIR>
+</DIR>
+</DIR>
+
+<P>&#9;}</P>
+<P>&#9;</P>
+<P>&#9;//now, pop the actual values off the stack</P>
+<P>&#9;LONGLONG first_val = sat_pop_zint_llong(); //first element value</P>
+<P>&#9;LONGLONG second_val = sat_pop_zint_llong(); //second element value</P>
+<P>&#9;sat_push_zint_llong(first_val+second_val); //push the addition</P>
+<P>exit:</P>
+<P>&#9;sat_stack_exit(rpl_stack_bias);</P>
+<P>&#9;return 0;</P>
+<P>}</P>
+</I><FONT SIZE=4><P>&nbsp;</P>
+<P>Now this program is considerably more complicated. How does it work? </P>
+<P>&nbsp;</P>
+<P>First, you must check how many items are on the stack. If there are less then 2, then fail. Sat_stack_depth() can be used to check this. Note the use of a GOTO (naughty!) to jump to the clean-up code.</P>
+<P>&nbsp;</P>
+<P>Next, you must check the type of the 2 top 2 objects. The Saturn module provides away to exam stack objects, or elements, without having to pop them from the stack. First declare the 2 things to pop as <I>SAT_STACK_ELEMENTS's</I>. Next, the function sat_get_stack_element() is used to get the element data off the stack. It accepts a pointer to the stack element, and the stack level to examine. This function does NOT pop the elements off the stack! It just lets us retrieve information about the elements, not the elements themselves.</P>
+<P>&nbsp;</P>
+<P>Stack Elements have a property, known as the 'Prologue'. This is used to identify the type of an object. HP's naming convention is used. Some types are listed below, for more, consult the saturn.h documentation.</P>
+<P>&nbsp;</P></DIR>
+</DIR>
+
+
+<UL>
+
+<UL>
+<LI>SAT_DOINT = ZINT </LI>
+<LI>SAT_DOCSTR = String </LI>
+<LI>SAT_DOREAL = Real (floating point number) </LI>
+<LI>SAT_DOARRY = Array</LI></UL>
+</UL>
+
+<P>&nbsp;</P><DIR>
+<DIR>
+
+<P>To check if a stack element is of a certain type, just compare its prologue to the corresponding type. </P>
+<P>&nbsp;</P>
+<P>After the types have been checked, the program is straightforward. The top 2 stack levels are popped as ZINTs, added, and pushed as a ZINT. </P>
+<P>&nbsp;</P>
+<P>You will find that you can only push/pop a few types directly (ZINTS, Reals, Strings etc). To use more complicated objects, such as symbolic expressions, you should use the -&gt;STR and -&gt;OBJ RPL commands to convert strings to objects and vice versa. </P>
+<P>&nbsp;</P>
+<P>Note that by default, HPGCC puts the CPU into a special power saving mode. The CPU runs at 12MHz in this mode. Running a HPGCC program actually consumes less power then if the calculator is idle at the stack, but the code is still many times faster then the built in programming languages.</P>
+<P>Programs using the Stack often need to execute as quickly as possible. To enter 75MHz 'Fast Mode', put a call to sys_slowOff() at the beginning of your program. This will use more batteries but give a performance boost.</P>
+</DIR>
+</DIR>
+</FONT></BODY>
+</HTML>
