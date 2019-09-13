@@ -1,3 +1,2 @@
-# hp39gs github pages  
-主要为HP39gs计算器开发支持  
-访问地址：https://yanye0xff.github.io/web/
+# 使用github搭建的个人博客静态站  
+传送门：https://yanye0xff.github.io/blog/
