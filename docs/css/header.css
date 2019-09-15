@@ -1,0 +1,27 @@
+.main-header {
+	position: relative;
+	padding-top: 20px;
+    padding-bottom: 10px;
+	height: 100px;
+	width: 100%;
+	color: rgba(255,255,255,.8);
+	background-color: #2b542c;
+	background-image: url(../images/header_bg.png);
+	font-size: 20px
+}
+
+.main-header h1 {
+	margin-top: 0;
+	color: #fff
+}
+
+.main-header p {
+	margin-bottom: 0;
+	line-height: 1.4
+}
+
+.main-header .container {
+	position: relative;
+	float: left;
+	margin-left:22px;
+}

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="Author" content="Yanye">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HPGCC文档</title>
+        <link href = "http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel = "stylesheet">
+        <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+        <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:300'>
+
+        <link rel="stylesheet" href = "css/header.css">
+        <link rel="stylesheet" href = "css/top_tab.css">
+        <link rel="stylesheet" href = "css/hpgcc.css">
+
+        <script src='js/jquery.js'></script>
+    </head>
+    <body>
+        <!--导航-->
+        <header class="main-header">
+            <div class="container">
+                <h1 id="home" style="cursor: pointer; color:white">Yanye's Blog</h1>
+                <p>记录生活，分享乐趣</p>
+            </div>
+        </header>
+        <!--tab栏-->    
+        <div class="tab">
+            <ul class="tabs">
+                <li><a href="#">Java项目</a></li>
+                <li><a href="#">Android项目</a></li>
+                <li><a href="#">Java技术</a></li>
+                <li><a href="#">Android技术</a></li>
+                <li><a href="#">网页前端</a></li>
+                <li><a href="#">Hp39gs计算器(8)</a></li>
+                <li><a href="hpgcc.html">HP GCC文档</a></li>
+            </ul>
+        </div>
+        <!--文档列表--> 
+        <table border="1" class="main_table">
+            <caption >Hp39GS HPGCC编程帮助文档</caption>
+            <tr>
+                <td>文档</td>
+                <td>链接</td>
+            </tr>
+            <tr>
+                <td>包含7个章节的简单编程指导</td>
+                <td><a href="hpgcc/guide/index.html" target="_blank">guide</a></td>
+            </tr>
+            <tr>
+                <td>灰度图形库</td>
+                <td><a href="hpgcc/reference/ggl/index.html" target="_blank">ggl</a></td>
+            </tr>
+            <tr>
+                <td>HP图形库,提供基础图形绘制api</td>
+                <td><a href="hpgcc/reference/hpg/index.html" target="_blank">hpg</a></td>
+            </tr>
+            <tr>
+                <td>HP标准库,提供标准输入输出,SATURN文件系统支持</td>
+                <td><a href="hpgcc/reference/hplib/index.html" target="_blank">hplib</a></td>
+            </tr>
+            <tr>
+                <td>HP图形窗口库,对HP39GS支持不佳</td>
+                <td><a href="hpgcc/reference/win/index.html" target="_blank">win</a></td>
+            </tr>
+        </table>
+        
+        <script src="js/index.js"></script>
+        <script>
+            $(document).ready(function() { 
+                window.setTabSelected(6);
+            });
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,15 @@
+.main_table {
+	margin-left: 10px;
+
+}
+
+.main_table caption {
+	margin-left: 80px;
+	font-size:18px;
+}
+
+.main_table td {
+	text-align:center;
+	font-size:16px;
+	font-family: 'Roboto', sans-serif;
+} 
