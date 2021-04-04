@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="Yanye">
+  <meta name="Keywords" content="markdown">
+  <meta name="Description" content="markdown online editor">
+  <title>MarkDownEditor</title>
+ </head>
+ <body>
+  <link rel="stylesheet" href="./css/editormd.min.css" />
+    <div id="editor">
+        <textarea style="display:none;">### HelloWorld</textarea>
+    </div>
+    <script src="jquery.min.js"></script>
+    <script src="editormd.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var editor = editormd("editor", {
+                 width: "100%",
+                 height: "720px",
+                path : "lib/"
+            });
+        });
+    </script>
+ </body>
+</html>
